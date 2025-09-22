@@ -1,6 +1,8 @@
 import './style.css'
 // import './topics/basic-types';
-import './topics/object-interfaces';
+// import './topics/object-interfaces';
+import './topics/classes';
+
 const app = document.querySelector<HTMLDivElement>('#app')!
 
 app.innerHTML = `
