@@ -1,6 +1,6 @@
 import './style.css'
-// import { basicTypes } from './topics/basic-types';
-
+// import './topics/basic-types';
+import './topics/object-interfaces';
 const app = document.querySelector<HTMLDivElement>('#app')!
 
 app.innerHTML = `
