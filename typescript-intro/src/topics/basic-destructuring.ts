@@ -24,3 +24,10 @@ const {song: anotherSong, songDuration: duration, details} = audioPlayer;
 const {author, year} = details;
 
 console.log({anotherSong, duration, author, year});
+
+// Destructuración de arrays
+const dbz: string[] = ['Goku', 'Vegeta', 'Trunks'];
+const [, , trunks, p3 = 'Not found'] = dbz;
+console.log({trunks, p3});
+
+export {};
