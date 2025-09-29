@@ -1,4 +1,5 @@
 import { Component, input, signal } from '@angular/core';
+import { Character } from '../../../interfaces/character.interface';
 
 @Component({
   selector: 'dragonball-character-list',
