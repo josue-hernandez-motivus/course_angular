@@ -1,12 +1,8 @@
 import { NgClass, UpperCasePipe } from "@angular/common";
 import { Component, computed, signal } from "@angular/core";
 import { CharacterListComponent } from "../../components/dragonball/character-list/character-list.component";
-import { CharacterAddComponent } from "../../components/dragonball/character-app/character-add.component";
-interface Character {
-  id: number;
-  name: string;
-  power: number;
-}
+import { CharacterAddComponent } from "../../components/dragonball/character-add/character-add.component";
+import { Character } from "../../interfaces/character.interface";
 
 @Component({
   templateUrl: './dragon-ball-super-page.html',
@@ -15,7 +11,7 @@ interface Character {
   imports: [CharacterListComponent, CharacterAddComponent]
 })
 export class DragonBallSuperPageComponent {
-  name = signal('Gohan');
+  name = signal('');
   power = signal(0);
 
 
@@ -32,5 +28,8 @@ export class DragonBallSuperPageComponent {
     },
   ]);
 
+  addCharacter(character: Character) {
+    this.characters.update(current => [...current, character]);
+  }
 
 }

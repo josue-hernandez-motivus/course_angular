@@ -9,4 +9,4 @@
       involucra un acceso directo al DOM para realizar esa conversión. -->
 <input type="number" class="form-control mt-2" placeholder="Poder del personaje" [value]="power()"
   (change)="power.set(+txtPower.value)" (input)="power.set(+txtPower.value)" #txtPower />
-<button class="mt-2 btn btn-primary">Agregar</button>
+<button class="mt-2 btn btn-primary" (click)="addCharacter()">Agregar</button>
