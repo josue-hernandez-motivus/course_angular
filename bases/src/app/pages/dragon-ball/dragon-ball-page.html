@@ -4,16 +4,16 @@
 <section class="row">
   <div class="col-12 col-sm-6">
     <h3>Agregar: {{ name() }}</h3>
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Nombre del personaje"
-      [value]="name()"
-      (change)="name.set(txtName.value)"
-      (input)="name.set(txtName.value)"
-      #txtName
-    />
-    <input type="number" class="form-control mt-2" placeholder="Poder del personaje" />
+    <input type="text" class="form-control" placeholder="Nombre del personaje" [value]="name()"
+      (change)="name.set(txtName.value)" (input)="name.set(txtName.value)" #txtName />
+      <!-- Usar el método +variable se puede utilizar a nivel global de Javascript,
+      pues según la documentación de javascript, el operador unario + convierte la variable a un number.
+      Esto puede provocar que, en caso de no tener números (o solamente números) en el valor de la variable,
+      la conversión nos devuelva un NaN (Not a Number).
+      Por otro lado, variable.valueAsNumber() solo se puede utilizar para los inputs de tipo number e
+      involucra un acceso directo al DOM para realizar esa conversión. -->
+    <input type="number" class="form-control mt-2" placeholder="Poder del personaje" [value]="power()"
+      (change)="power.set(+txtPower.value)" (input)="power.set(+txtPower.value)" #txtPower />
     <button class="mt-2 btn btn-primary">Agregar</button>
   </div>
   <div class="col-12 col-sm-6">
