@@ -1,10 +1,11 @@
 import { environment } from "@/environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { inject, Injectable, signal } from "@angular/core";
+import { computed, inject, Injectable, signal } from "@angular/core";
 import type { GiphyResponse } from "../interfaces/giphy.interfaces";
 import { GifMapper } from "../mapper/gif.mapper";
 import { Gif } from "../interfaces/gif.interface";
 import { map, tap } from "rxjs";
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,8 @@ export class GifsService {
   trendingGifsLoading = signal(true);
   trendingGifs = signal<Gif[]>([]);
 
+  searchHistory = signal<Record<string, Gif[]>>({});
+  searchHistoryKeys = computed<string[]>(() => Object.keys(this.searchHistory()));
 
   constructor() {
     this.loadTrendingGifs();
@@ -33,7 +36,7 @@ export class GifsService {
         const gifs = GifMapper.mapGiphyItemsToGifsArray(response.data);
         this.trendingGifs.set(gifs);
         this.trendingGifsLoading.set(false);
-        console.log({gifs});
+        console.log({ gifs });
       },
       error: (error) => {
         console.error(error);
@@ -42,19 +45,22 @@ export class GifsService {
   }
 
   // Example for use funcitons of Observable like as pipe
-  searchGifs(value: string) {
+  searchGifs(query: string) {
     return this.http.get<GiphyResponse>(`${environment.giphyUrl}/gifs/search`, {
       params: {
         api_key: environment.giphyApiKey,
-        limit:20,
-        q: value,
+        limit: 20,
+        q: query,
       }
     }).pipe(
       // Functions of pipe can concatenate more functions
-      map(({data}) => data),
+      map(({ data }) => data),
       map((items) => {
         const gifs = GifMapper.mapGiphyItemsToGifsArray(items);
         return gifs;
+      }),
+      tap((items) => {
+        this.searchHistory.update((history) => ({...history,  [query.toLowerCase()]: items}));
       })
     )
   }
