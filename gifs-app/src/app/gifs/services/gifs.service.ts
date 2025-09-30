@@ -4,6 +4,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import type { GiphyResponse } from "../interfaces/giphy.interfaces";
 import { GifMapper } from "../mapper/gif.mapper";
 import { Gif } from "../interfaces/gif.interface";
+import { map, tap } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +39,23 @@ export class GifsService {
         console.error(error);
       }
     });
+  }
+
+  // Example for use funcitons of Observable like as pipe
+  searchGifs(value: string) {
+    return this.http.get<GiphyResponse>(`${environment.giphyUrl}/gifs/search`, {
+      params: {
+        api_key: environment.giphyApiKey,
+        limit:20,
+        q: value,
+      }
+    }).pipe(
+      // Functions of pipe can concatenate more functions
+      map(({data}) => data),
+      map((items) => {
+        const gifs = GifMapper.mapGiphyItemsToGifsArray(items);
+        return gifs;
+      })
+    )
   }
 }
