@@ -22,7 +22,7 @@
         <td>{{ country.name }}</td>
         <td>{{ country.capital }}</td>
         <td><span class="badge badge-secondary">{{ country.population | number }}</span></td>
-        <td><a [routerLink]="['/country', country.cca2]">Más informaciónr</a></td>
+        <td><a [routerLink]="['/country/by', country.cca2]">Más informaciónr</a></td>
       </tr>
       }
     </tbody>

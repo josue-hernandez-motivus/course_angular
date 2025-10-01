@@ -25,4 +25,12 @@ export class CountryService {
     );
   }
 
+  searchByCountry(query: string): Observable<Country[]> {
+    query = query.toLowerCase();
+    return this.http.get<RESTCountry[]>(`${API_URL}/name/${query}`)
+    .pipe(
+      map((resp) => CountryMapper.mapRestCountriesToCountries(resp)),
+    );
+  }
+
 }
