@@ -24,6 +24,18 @@
         <td><span class="badge badge-secondary">{{ country.population | number }}</span></td>
         <td><a [routerLink]="['/country/by', country.cca2]">Más informaciónr</a></td>
       </tr>
+      } @if(isLoading()) {
+        <tr>
+          <td colspan="8" class="text-center">Cargando...</td>
+        </tr>
+      } @if(countries().length === 0 && !isLoading()) {
+        <tr>
+          <td colspan="8" class="text-center">No hay países</td>
+        </tr>
+      } @if(errorMessage()) {
+        <tr>
+          <td colspan="8" class="text-center">Error: {{ errorMessage() }}</td>
+        </tr>
       }
     </tbody>
   </table>
