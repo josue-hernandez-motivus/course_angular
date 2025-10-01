@@ -4,6 +4,7 @@ import { RESTCountry } from '../interfaces/res-countries.interfaces';
 import { CountryMapper } from '../mappers/country.mapper';
 import { map, Observable, catchError, throwError, delay, of, tap } from 'rxjs';
 import { Country } from '../interfaces/country.interface';
+import { Region } from '../interfaces/region.type';
 
 const API_URL = 'https://restcountries.com/v3.1';
 
@@ -14,6 +15,8 @@ export class CountryService {
   private http = inject(HttpClient);
 
   private queryCacheCapital = new Map<string, Country[]>();
+  private queryCacheCountry = new Map<string, Country[]>();
+  private queryCacheRegion = new Map<Region, Country[]>();
 
   searchByCapital(query: string): Observable<Country[]> {
     query = query.toLowerCase();
@@ -36,13 +39,40 @@ export class CountryService {
 
   searchByCountry(query: string): Observable<Country[]> {
     query = query.toLowerCase();
+    if(this.queryCacheCountry.has(query)) {
+      return of(this.queryCacheCountry.get(query)!);
+    }
     return this.http.get<RESTCountry[]>(`${API_URL}/name/${query}`).pipe(
       map((resp) => CountryMapper.mapRestCountriesToCountries(resp)),
+      tap((countries) => {
+        this.queryCacheCountry.set(query, countries);
+      }),
       delay(1000),
       catchError((err) => {
         console.error('Error en la búsqueda:', err);
         return throwError(
           () => new Error('No se pudo obtener países con ese query: ' + err.message)
+        );
+      })
+    );
+  }
+
+
+  searchByRegion(region: Region) {
+    const url = `${API_URL}/region/${region}`;
+
+    if (this.queryCacheCountry.has(region)) {
+      return of(this.queryCacheCountry.get(region) ?? []);
+    }
+
+    return this.http.get<RESTCountry[]>(url).pipe(
+      map((resp) => CountryMapper.mapRestCountriesToCountries(resp)),
+      tap((countries) => this.queryCacheRegion.set(region, countries)),
+      catchError((error) => {
+        console.log('Error fetching ', error);
+
+        return throwError(
+          () => new Error(`No se pudo obtener países con ese query ${region}`)
         );
       })
     );
