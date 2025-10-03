@@ -1,10 +1,19 @@
 import { Component, ElementRef, input, viewChild } from '@angular/core';
 import mapboxgl from 'mapbox-gl';
+import { environment } from '../../../../environments/environment';
 
+mapboxgl.accessToken = environment.mapboxKey;
 @Component({
   selector: 'app-mini-map',
   imports: [],
   templateUrl: './mini-map.component.html',
+  styles: `
+    div {
+      width: 100%;
+      height: 260px;
+    }
+
+  `,
 })
 export class MiniMapComponent {
   divElement = viewChild<ElementRef>('map');
